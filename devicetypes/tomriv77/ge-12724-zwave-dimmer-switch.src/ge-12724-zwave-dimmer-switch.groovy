@@ -1,5 +1,5 @@
 /**
- *  Copyright 2015 SmartThings
+ *  Copyright 2016 SmartThings
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at:
@@ -10,6 +10,11 @@
  *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
  *  for the specific language governing permissions and limitations under the License.
  *
+ *  GE 12724 Z-Wave Dimmer Switch
+ *    (recycles code from Z-Wave Dimmer Switch)
+ *
+ *  Author: SmartThings, tomriv77
+ *  Date: August 5, 2016
  */
 metadata {
 	definition (name: "GE 12724 Z-Wave Dimmer Switch", namespace: "tomriv77", author: "tomriv77") {
@@ -26,7 +31,8 @@ metadata {
         command "setHalfLight"
         command "setMaxLight"
 
-		fingerprint inClusters: "0x26"
+		fingerprint type: "1101", mfr: "0063", prod: "4944", model: "3031"
+        fingerprint cc: "26,27,73,70,86,72,77"
 	}
     
     preferences {
@@ -113,9 +119,9 @@ metadata {
 			}
 		}
 
-		/*standardTile("refresh", "device.switch", width: 2, height: 2, inactiveLabel: false, decoration: "flat") {
+		standardTile("refresh", "device.switch", width: 2, height: 2, inactiveLabel: false, decoration: "flat") {
 			state "default", label:'', action:"refresh.refresh", icon:"st.secondary.refresh"
-		}*/
+		}
         
         standardTile("maxLight", "device.switchLevel", width: 2, height: 2, inactiveLabel: false, decoration: "flat") {
         	state "default", action: "setMaxLight", label: "BRIGHT", icon: "st.illuminance.illuminance.bright"
@@ -130,7 +136,7 @@ metadata {
         }
 
 		main(["switch"])
-		details(["switch", /*"refresh", */"minLight", "halfLight", "maxLight"])
+		details(["switch", "minLight", "halfLight", "maxLight", "refresh"])
 	}
 }
 
@@ -194,7 +200,7 @@ def configure() {
     	zwave.configurationV1.configurationGet(parameterNumber: 0x08).format()
     ], 3000)
     
-    log.debug cmd
+    //log.debug cmd
   	cmd
 }
 
